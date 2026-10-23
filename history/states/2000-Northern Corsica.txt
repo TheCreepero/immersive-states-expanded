@@ -1,0 +1,18 @@
+state = {
+	id = 2000
+	name = "STATE_2000"
+	manpower = 107633
+	state_category = pastoral
+
+	history = {
+		owner = FRA
+		buildings = {
+		}
+		add_core_of = FRA
+		add_core_of = COR
+	}
+
+	provinces = {
+		9851
+	}
+}
