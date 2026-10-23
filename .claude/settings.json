@@ -1,0 +1,59 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell*build.ps1 -ValidateOnly*)",
+      "Bash(pwsh*build.ps1 -ValidateOnly*)",
+      "Bash(powershell*build.ps1 -Test*)",
+      "Bash(pwsh*build.ps1 -Test*)",
+      "Bash(powershell*Run-Tests.ps1*)",
+      "Bash(pwsh*Run-Tests.ps1*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(powershell*Get-HoiState.ps1*)",
+      "Bash(pwsh*Get-HoiState.ps1*)",
+      "Bash(powershell*New-HoiCarvedState.ps1*)",
+      "Bash(pwsh*New-HoiCarvedState.ps1*)",
+      "Bash(powershell*Sync-HoiStateCompatch.ps1*)",
+      "Bash(pwsh*Sync-HoiStateCompatch.ps1*)",
+      "Bash(powershell*Test-HoiStateIntegrity.ps1*)",
+      "Bash(pwsh*Test-HoiStateIntegrity.ps1*)"
+
+    ],
+    "ask": [
+      "Bash(*build.ps1*-PublishSteam*)",
+      "Bash(*build.ps1*-InstallSteamCmd*)",
+      "Bash(*build.ps1*-Deploy*)",
+      "Bash(*build.ps1*-DevLink*)",
+      "Bash(*build.ps1*-Clean*)",
+      "Bash(*steamcmd*)",
+      "Bash(git push*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-synced-files.ps1\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/validate-after-edit.ps1\"",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}
