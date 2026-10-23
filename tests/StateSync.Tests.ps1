@@ -36,6 +36,34 @@ Describe 'State Reference Discovery Tooling' {
     }
 }
 
+Describe 'State Reference Summary' {
+    It 'Summarises the references of a state with the same total as the detailed rows' {
+        $referencesScript = 'C:\dev\Hearts of Iron IV Modding Manager\Scripts\States\Get-HoiStateReferences.ps1'
+        $rows = @(& $referencesScript -StateId 1 -Type focus -PassThru)
+        $summary = & $referencesScript -StateId 1 -Type focus -Summary -PassThru
+
+        $summary.Total | Should -Be $rows.Count
+        $summary.Files | Should -Be @($rows | Select-Object -ExpandProperty File -Unique).Count
+        (@($summary.ByKind) | Measure-Object -Property Count -Sum).Sum | Should -Be $rows.Count
+        (@($summary.TopFiles) | Measure-Object -Property Count -Sum).Sum | Should -Be $rows.Count
+        $summary.TopFiles[0].Count | Should -BeGreaterOrEqual $summary.TopFiles[-1].Count
+    }
+
+    It 'Shows only the first rows of the detailed text output and says how to see more' {
+        $referencesScript = 'C:\dev\Hearts of Iron IV Modding Manager\Scripts\States\Get-HoiStateReferences.ps1'
+        $text = (& $referencesScript -StateId 1 -Type focus -Limit 3 | Out-String)
+
+        $text | Should -Match 'more result\(s\) not shown \(raise -Limit\)'
+    }
+
+    It 'Prints the summary as a few lines' {
+        $referencesScript = 'C:\dev\Hearts of Iron IV Modding Manager\Scripts\States\Get-HoiStateReferences.ps1'
+        $lines = @(& $referencesScript -StateId 1 -Type focus -Summary -Limit 3)
+
+        $lines.Count | Should -BeLessOrEqual 10
+        $lines[0] | Should -Match '^State 1: \d+ reference\(s\) in \d+ file\(s\)$'
+    }
+}
 Describe 'Immersive States Expanded - State Sync Architecture' {
     It 'Validates mod state integrity' {
         $integrityScript = 'C:\dev\Hearts of Iron IV Modding Manager\Scripts\States\Test-HoiStateIntegrity.ps1'
@@ -63,3 +91,55 @@ Describe 'Immersive States Expanded - State Sync Architecture' {
     }
 }
 
+Describe 'Immersive States Expanded - Sync Entries' {
+    BeforeAll {
+        $effectsPath = Join-Path $modRoot 'common\scripted_effects\ise_state_sync_effects.txt'
+        $effectsText = [System.IO.File]::ReadAllText($effectsPath).Replace("`r`n", "`n")
+
+        function Get-EffectBlock {
+            param([string]$Text, [string]$Name)
+
+            $start = [regex]::Match($Text, "(?m)^$([regex]::Escape($Name))\s*=\s*\{")
+            if (-not $start.Success) {
+                return $null
+            }
+            $depth = 0
+            for ($position = $start.Index + $start.Length - 1; $position -lt $Text.Length; $position++) {
+                if ($Text[$position] -eq '{') { $depth++ }
+                elseif ($Text[$position] -eq '}') {
+                    $depth--
+                    if ($depth -eq 0) {
+                        return $Text.Substring($start.Index, $position - $start.Index + 1)
+                    }
+                }
+            }
+            return $null
+        }
+
+        $script:CarvedStateIds = @(Get-ChildItem -LiteralPath (Join-Path $modRoot 'history\states') -Filter '*.txt' -File | ForEach-Object {
+                $idMatch = [regex]::Match([System.IO.File]::ReadAllText($_.FullName), '(?m)\bid\s*=\s*(\d+)')
+                if ($idMatch.Success -and [int]$idMatch.Groups[1].Value -ge 2000) { [int]$idMatch.Groups[1].Value }
+            })
+    }
+
+    It 'Registers every carved state in the claims and cores effect' {
+        $block = Get-EffectBlock -Text $effectsText -Name 'ise_sync_claims_and_cores'
+        $block | Should -Not -BeNullOrEmpty
+        $missing = @($script:CarvedStateIds | Where-Object { $block -notmatch "(?m)^\s*$_\s*=\s*\{" })
+        $missing | Should -BeNullOrEmpty -Because "state(s) $($missing -join ', ') have no entry in ise_sync_claims_and_cores"
+    }
+
+    It 'Registers every carved state in the control and owner effect' {
+        $block = Get-EffectBlock -Text $effectsText -Name 'ise_sync_state_control_changed'
+        $block | Should -Not -BeNullOrEmpty
+        $missing = @($script:CarvedStateIds | Where-Object { $block -notmatch "(?m)^\s*$_\s*=\s*\{" })
+        $missing | Should -BeNullOrEmpty -Because "state(s) $($missing -join ', ') have no entry in ise_sync_state_control_changed"
+    }
+
+    It 'Never transfers ownership of a child state just because control of its parent changed' {
+        $block = Get-EffectBlock -Text $effectsText -Name 'ise_sync_state_control_changed'
+        $block | Should -Not -BeNullOrEmpty
+        $block | Should -Not -Match 'transfer_state'
+        $block | Should -Match 'set_state_controller'
+    }
+}

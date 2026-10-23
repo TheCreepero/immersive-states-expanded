@@ -17,6 +17,7 @@ Shared rules for every mod in this tree (file encodings, build commands, engine 
 - The main session orchestrates; subagents cannot start subagents. Researchers for different regions may run in parallel; Implementers may not.
 - `implementer` is Haiku and stops after two failed validations; hand-merging compatch conflicts, ports and victory-point edge cases are done by the main session or a Sonnet override.
 - `reviewer` is read-only, has no web access, reads the git diff of this repo and the changed compatch repos plus SPEC, AGENTS, the proposal and `tests/`, and does not judge history.
+- Map geometry comes from `Get-HoiProvinceMap.ps1` (text) and `Export-HoiProvinceMapImage.ps1` (picture); the rules for who may use which are in the `hoi4-state-modding` skill, section "Seeing the map". In short: text first; the `implementer` never renders and stops on a `Contiguity: WARN`; the `reviewer` checks every touched state and renders only for an unexplained WARN; the main session renders for the user's decision on OPEN items.
 
 ## Git
 - These conventions apply when the user asks for a branch or a commit; the Manager's rule still holds that nothing is committed, pushed or merged without the user's word.
@@ -25,12 +26,13 @@ Shared rules for every mod in this tree (file encodings, build commands, engine 
 - Once the user has confirmed the region's rework in game, its feature branch may be merged into `main`. The merge happens only on the user's word.
 
 ## Commands beyond build.ps1
-- State scripts live in the Manager's `Scripts/States` and `Scripts/Vanilla`; the `hoi4-state-modding` skill has the commands (`Get-HoiState.ps1`, `Get-HoiStateReferences.ps1`, `New-HoiCarvedState.ps1`, `Sync-HoiStateCompatch.ps1`, `Test-HoiStateIntegrity.ps1`).
+- State scripts live in the Manager's `Scripts/States` and `Scripts/Vanilla`; the `hoi4-state-modding` skill has the commands (`Get-HoiState.ps1`, `Get-HoiStateReferences.ps1`, `New-HoiCarvedState.ps1`, `Sync-HoiStateCompatch.ps1`, `Test-HoiStateIntegrity.ps1`). The map tools `Get-HoiProvinceMap.ps1` and `Export-HoiProvinceMapImage.ps1` are in `Scripts/Vanilla`; `Test-HoiStateIntegrity.ps1 -CheckContiguity` adds the land-contiguity check.
 
 ## Read when
 | Task | Read |
 |---|---|
 | Splitting a region | `SPEC.md`, then the region's file in `research/` |
+| Checking where provinces lie, what a state borders, or whether a carve leaves a state in pieces | the `hoi4-state-modding` skill, section "Seeing the map" |
 | Publishing to the Workshop | `WORKSHOP_DESCRIPTION_GUIDELINES.md` |
 
 ## Engine Knowledge

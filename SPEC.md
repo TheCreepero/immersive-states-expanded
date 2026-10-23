@@ -34,4 +34,4 @@ Split vanilla Hearts of Iron IV states into smaller, historically grounded state
 6. Carved child states inherit `set_demilitarized_zone = yes` when taking provinces from a demilitarized base state [SCR-082].
 
 ## End-to-end check
-Start a 1936 game with only this mod enabled. Every split state appears on the map with its name, its owner and its cores. `error.log` has no new state, province or localisation errors compared with a vanilla run. The user will conduct the in-game checks. Reading logs is left to the agent.
+Start a 1936 game with only this mod enabled. Every split state appears on the map with its name, its owner and its cores. `error.log` has no new state, province or localisation errors compared with a vanilla run. The user will conduct the in-game checks. Reading logs is left to the agent. The map tools and the contiguity check are screens, not proof, and do not replace the in-game check.

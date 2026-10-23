@@ -70,6 +70,8 @@ ise_sync_claims_and_cores = {
 
 ise_sync_state_control_changed = {
 	# Parent State 1 (Corsica) -> Child State 2000 (Northern Corsica)
+	# Control follows the parent. Ownership follows only through the owner rule below,
+	# so an occupation of the parent does not annex the child.
 	if = {
 		limit = {
 			FROM.FROM = { state = 1 }
@@ -79,7 +81,7 @@ ise_sync_state_control_changed = {
 			}
 		}
 		ROOT = {
-			transfer_state = 2000
+			set_state_controller = 2000
 		}
 	}
 	# When owner changes for State 1

@@ -17,7 +17,13 @@
       "Bash(powershell*Sync-HoiStateCompatch.ps1*)",
       "Bash(pwsh*Sync-HoiStateCompatch.ps1*)",
       "Bash(powershell*Test-HoiStateIntegrity.ps1*)",
-      "Bash(pwsh*Test-HoiStateIntegrity.ps1*)"
+      "Bash(pwsh*Test-HoiStateIntegrity.ps1*)",
+      "Bash(powershell*Get-HoiProvinceMap.ps1*)",
+      "Bash(pwsh*Get-HoiProvinceMap.ps1*)",
+      "Bash(powershell*Export-HoiProvinceMapImage.ps1*)",
+      "Bash(pwsh*Export-HoiProvinceMapImage.ps1*)",
+      "Bash(powershell*Get-HoiStateReferences.ps1*)",
+      "Bash(pwsh*Get-HoiStateReferences.ps1*)"
 
     ],
     "ask": [
