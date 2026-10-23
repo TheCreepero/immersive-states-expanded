@@ -9,7 +9,7 @@ Shared rules for every mod in this tree (file encodings, build commands, engine 
 
 ## Mod invariants
 - The invariants in `SPEC.md` are the acceptance test for every split; no work is done until `build.ps1 -ValidateOnly`, `build.ps1 -Test` and `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded` pass.
-- New state ids start at 2000 and a state file replaces the upstream file whole [RT56-005] [LOAD-010]; a naval base needs a coastal province [EQP-005].
+- New state ids start at 2000 and a state file replaces the upstream file whole [RT56-005] [LOAD-010]; a naval base needs a coastal province [EQP-005]; carved states inherit demilitarization from base states [SCR-082] and parent state focus/event effects are synchronized modularly in common/on_actions/ise_state_sync.txt [SCR-080].
 - Both compatches (`mods/immersive-states-expanded-rt56-compatch` and `mods/immersive-states-expanded-rkplus-compatch`) are updated in the same work as every split.
 
 ## Workflow (subagents in `.claude/agents/`)
@@ -25,7 +25,7 @@ Shared rules for every mod in this tree (file encodings, build commands, engine 
 - Once the user has confirmed the region's rework in game, its feature branch may be merged into `main`. The merge happens only on the user's word.
 
 ## Commands beyond build.ps1
-- State scripts live in the Manager's `Scripts/States` and `Scripts/Vanilla`; the `hoi4-state-modding` skill has the commands (`Get-HoiState.ps1`, `New-HoiCarvedState.ps1`, `Sync-HoiStateCompatch.ps1`, `Test-HoiStateIntegrity.ps1`).
+- State scripts live in the Manager's `Scripts/States` and `Scripts/Vanilla`; the `hoi4-state-modding` skill has the commands (`Get-HoiState.ps1`, `Get-HoiStateReferences.ps1`, `New-HoiCarvedState.ps1`, `Sync-HoiStateCompatch.ps1`, `Test-HoiStateIntegrity.ps1`).
 
 ## Read when
 | Task | Read |
@@ -35,5 +35,5 @@ Shared rules for every mod in this tree (file encodings, build commands, engine 
 
 ## Engine Knowledge
 - Engine facts live in the Modding Manager's register, reached through the user-level `hoi4-modding-knowledge` skill: search it before a new kind of file and before asking for a game launch, cite ids here, never write a fact into this repository.
-- Topics this mod leans on: `encoding-and-syntax`, `loading-and-overrides`.
+- Topics this mod leans on: `encoding-and-syntax`, `loading-and-overrides`, `script-language`.
 - `tests/Knowledge.Tests.ps1` runs the register's audit for this repository; it is a copy the Manager keeps current.

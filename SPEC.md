@@ -22,6 +22,7 @@ Split vanilla Hearts of Iron IV states into smaller, historically grounded state
 - Game version `1.19.*` (descriptor.mod).
 - Vanilla and Road to 56 compatible, as the Workshop template claims. RT56 ships its own state files, so a compatibility patch exists at `C:\dev\Hearts of Iron IV Modding Manager\mods\immersive-states-expanded-rt56-compatch` and needs to be kept up to date with every update made to this mod.
 - Supports the local version of Reichskommissariats Plus mod via compatibility patch at `C:\dev\Hearts of Iron IV Modding Manager\mods\immersive-states-expanded-rkplus-compatch` kept up to date alongside this mod.
+- Modular state synchronization via `common/on_actions/ise_state_sync.txt` (and `ise_rkplus_sync.txt`) propagates parent state events and focuses (demilitarization clearance, state transfers) to carved child states without overriding monolithic focus files [LOAD-010] [SCR-080] [SCR-082].
 - Each split touches the files the engine needs for a state. Look the list up in the `hoi4-modding-knowledge` register instead of writing it here.
 
 ## Invariants (each one becomes a test)
@@ -30,6 +31,7 @@ Split vanilla Hearts of Iron IV states into smaller, historically grounded state
 3. Manpower, building levels and resources of parent plus children equal the vanilla parent.
 4. Every `STATE_<id>` used in history has a localisation key.
 5. `build.ps1 -ValidateOnly` and `tests/Run-Tests.ps1` pass.
+6. Carved child states inherit `set_demilitarized_zone = yes` when taking provinces from a demilitarized base state [SCR-082].
 
 ## End-to-end check
 Start a 1936 game with only this mod enabled. Every split state appears on the map with its name, its owner and its cores. `error.log` has no new state, province or localisation errors compared with a vanilla run. The user will conduct the in-game checks. Reading logs is left to the agent.
