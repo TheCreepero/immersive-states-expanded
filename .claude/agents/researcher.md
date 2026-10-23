@@ -30,13 +30,14 @@ One section per parent state:
 | Provinces moving | province ids (from Get-HoiState.ps1) |
 | Manpower share | ratio of the parent's manpower, proportional to what the provinces hold |
 | Owner / cores | unchanged from the parent unless the history says otherwise (flag it) |
+| Infrastructure | the parent's level, or one level more when the new state is a single carved-out city (say which) |
 | Historical basis | one or two sentences |
 | Sources | URLs or titles |
 | Map check | RESULT line of `Get-HoiProvinceMap.ps1 -Mode Check -Split` for this carve, and any WARN |
 | State references | Output of `Get-HoiStateReferences.ps1 -StateId <id> -Mod <Road to 56>,<Reichskommissariats Plus> -Summary` (counts per mod, type and kind and the busiest files; a popular state has hundreds of rows, so detail only for a file that matters): focuses, events, decisions, DMZ or puppet transfers |
 | Confidence | high, medium or low, with the reason |
 
-End the file with an OPEN list and the suggested carve order within the region. Order matters: the Implementer runs carves one at a time and ids are allocated from 2000.
+End the file with an OPEN list and the suggested carve order within the region. Order matters: the Implementer runs carves one at a time and ids are allocated in that order after the base's highest id (vanilla: 1082, 1083, ...), so the order of the carves is the order of the ids.
 
 ## Limits
 - Do not propose new factories, resources or manpower beyond what the parent had (SPEC out of scope).

@@ -5,9 +5,9 @@ BeforeAll {
 }
 
 Describe 'State Integrity' {
-    It 'Passes Test-HoiStateIntegrity verification without errors' {
+    It 'Passes Test-HoiStateIntegrity verification, including ids, localisation and building positions, without errors' {
         Test-Path -LiteralPath $script:IntegrityScript | Should -BeTrue
-        $report = & $script:IntegrityScript -ModPath $script:RepoRoot -PassThru
+        $report = & $script:IntegrityScript -ModPath $script:RepoRoot -CheckLoadOrder -PassThru
         $report.Passed | Should -BeTrue
         $report.Errors.Count | Should -Be 0
     }

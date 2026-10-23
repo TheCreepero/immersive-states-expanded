@@ -4,6 +4,7 @@ BeforeAll {
     $rkpModPath = 'C:\Users\eetup.DESKTOP-UM7MOIP\Documents\Paradox Interactive\Hearts of Iron IV\mod\frozen_2910757018_2026-10-22'
 
     . (Join-Path $managerRoot 'Scripts\Vanilla\HoiVanilla.Common.ps1')
+    . (Join-Path $managerRoot 'Scripts\States\HoiStateTools.Common.ps1')
 }
 
 Describe 'State Reference Discovery Tooling' {
@@ -116,9 +117,10 @@ Describe 'Immersive States Expanded - Sync Entries' {
             return $null
         }
 
+        $baseHighestId = Get-HoiHighestStateId -Folder (Join-Path (Resolve-Hoi4Install) 'history\states')
         $script:CarvedStateIds = @(Get-ChildItem -LiteralPath (Join-Path $modRoot 'history\states') -Filter '*.txt' -File | ForEach-Object {
                 $idMatch = [regex]::Match([System.IO.File]::ReadAllText($_.FullName), '(?m)\bid\s*=\s*(\d+)')
-                if ($idMatch.Success -and [int]$idMatch.Groups[1].Value -ge 2000) { [int]$idMatch.Groups[1].Value }
+                if ($idMatch.Success -and [int]$idMatch.Groups[1].Value -gt $baseHighestId) { [int]$idMatch.Groups[1].Value }
             })
     }
 

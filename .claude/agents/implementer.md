@@ -15,13 +15,13 @@ A path to an approved proposal in `research/`, and which carves from it to run. 
 
 ## Procedure, per carve
 1. Inspect the parent with `Get-HoiState.ps1 -Id <id> -Provinces`.
-2. Run `New-HoiCarvedState.ps1` with the proposal's values. Use the script for all state, airport and localisation changes; do not hand-edit state files to get around it. Read the `Contiguity:` line it prints: `OK` and you go on; `WARN` counts as a failed validation, so stop and report it.
+2. Run `New-HoiCarvedState.ps1` with the proposal's values. Use the script for all state, building position and localisation changes (it splits the rows of `map/buildings.txt` and writes the names to the mod's own localisation file); do not hand-edit them to get around it. For a single-city state from the proposal pass `-InfrastructureBonus 1`. Read the `Contiguity:` line it prints: `OK` and you go on; `WARN` counts as a failed validation, so stop and report it.
 3. After the last carve of the batch, run `Sync-HoiStateCompatch.ps1` for the RT56 compatch (`mods/immersive-states-expanded-rt56-compatch`) and sync state hooks to the RKP compatch (`mods/immersive-states-expanded-rkplus-compatch`). Register any necessary synchronization entries in `common/on_actions/ise_state_sync.txt`.
-4. Run `Get-HoiProvinceMap.ps1 -Mode Check -State <id>` for the parent and for each new state of the batch, then `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded`, then `build.ps1 -ValidateOnly` and `build.ps1 -Test`.
+4. Run `Get-HoiProvinceMap.ps1 -Mode Check -State <id>` for the parent and for each new state of the batch, then `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded -CheckLoadOrder`, then `build.ps1 -ValidateOnly` and `build.ps1 -Test`.
 5. Run `git status` in this repo and in each compatch repo you touched.
 
 ## Hard rules
-- One carve at a time. Another Implementer may not run at the same time; they share `map/airports.txt`, the localisation file and id allocation.
+- One carve at a time. Another Implementer may not run at the same time; they share `map/buildings.txt`, the localisation file and id allocation.
 - If a validation fails twice, stop. Report the command, the output and what you changed. Do not improvise fixes in state files, do not hand-merge compatch conflicts, and do not move naval bases or victory points by hand. Those cases go back to the main session.
 - Map tools: text only. Never run `Export-HoiProvinceMapImage.ps1` and never read a PNG; ids and verdicts come from the text output. A `RESULT: WARN` is reported to the main session, not repaired by you.
 - Encodings: `.txt` UTF-8 without BOM, localisation `.yml` UTF-8 with BOM. Use the scripts, or `[System.IO.File]::WriteAllText` with `[System.Text.UTF8Encoding]::new($false)`.

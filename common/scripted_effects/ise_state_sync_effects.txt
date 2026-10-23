@@ -49,39 +49,39 @@ ise_sync_demilitarized_zones = {
 }
 
 ise_sync_claims_and_cores = {
-	# State 1 (Corsica) -> Child State 2000 (Northern Corsica)
+	# State 1 (Corsica) -> Child State 1082 (Northern Corsica)
 	# Claim propagation (e.g. Italian focuses/decisions claiming Corsica)
 	if = {
 		limit = {
 			1 = { is_claimed_by = ITA }
-			2000 = { NOT = { is_claimed_by = ITA } }
+			1082 = { NOT = { is_claimed_by = ITA } }
 		}
-		2000 = { add_claim_by = ITA }
+		1082 = { add_claim_by = ITA }
 	}
 	# Core propagation (if any tag cores State 1)
 	every_possible_country = {
 		limit = {
 			1 = { is_core_of = PREV }
-			2000 = { NOT = { is_core_of = PREV } }
+			1082 = { NOT = { is_core_of = PREV } }
 		}
-		2000 = { add_core_of = PREV }
+		1082 = { add_core_of = PREV }
 	}
 }
 
 ise_sync_state_control_changed = {
-	# Parent State 1 (Corsica) -> Child State 2000 (Northern Corsica)
+	# Parent State 1 (Corsica) -> Child State 1082 (Northern Corsica)
 	# Control follows the parent. Ownership follows only through the owner rule below,
 	# so an occupation of the parent does not annex the child.
 	if = {
 		limit = {
 			FROM.FROM = { state = 1 }
-			2000 = {
+			1082 = {
 				controller = { tag = FROM }
 				NOT = { controller = { tag = ROOT } }
 			}
 		}
 		ROOT = {
-			set_state_controller = 2000
+			set_state_controller = 1082
 		}
 	}
 	# When owner changes for State 1
@@ -89,10 +89,10 @@ ise_sync_state_control_changed = {
 		limit = {
 			FROM.FROM = { state = 1 }
 			1 = { is_owned_by = ROOT }
-			2000 = { NOT = { is_owned_by = ROOT } }
+			1082 = { NOT = { is_owned_by = ROOT } }
 		}
 		ROOT = {
-			set_state_owner = 2000
+			set_state_owner = 1082
 		}
 	}
 }
