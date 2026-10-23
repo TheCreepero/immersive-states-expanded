@@ -1,0 +1,25 @@
+# Immersive States Expanded - State Synchronization Engine
+# Non-invasive, modular reactive hooks to ensure child states follow parent state changes
+# without overriding vanilla or overhaul focus tree files [LOAD-010] [SCR-080].
+
+on_actions = {
+	on_weekly = {
+		effect = {
+			ise_sync_demilitarized_zones = yes
+			ise_sync_claims_and_cores = yes
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			ise_sync_state_control_changed = yes
+		}
+	}
+
+	on_startup = {
+		effect = {
+			ise_sync_startup_validation = yes
+		}
+	}
+}
+

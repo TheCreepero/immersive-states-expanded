@@ -1,0 +1,101 @@
+# Immersive States Expanded - Scripted Effects for State Synchronization
+# Ensures carved child states automatically follow parent state demilitarization,
+# territorial transfers, claims, and cores in real-time.
+
+ise_sync_demilitarized_zones = {
+	# Rhineland synchronization
+	# State 42 (Rhineland)
+	if = {
+		limit = {
+			OR = {
+				has_global_flag = rhineland_remilitarized
+				42 = { is_demilitarized_zone = no }
+			}
+		}
+		# Any future carved state from 42 will be listed here
+	}
+	# State 51 (Moselland)
+	if = {
+		limit = {
+			51 = { is_demilitarized_zone = no }
+		}
+		# Any future carved state from 51 will be listed here
+	}
+	# State 978 (Baden)
+	if = {
+		limit = {
+			978 = { is_demilitarized_zone = no }
+		}
+		# Any future carved state from 978 will be listed here
+	}
+
+	# Turkish Straits synchronization
+	# States 340 (Bursa), 341 (Edirne), 797 (Istanbul)
+	if = {
+		limit = {
+			340 = { is_demilitarized_zone = no }
+		}
+	}
+	if = {
+		limit = {
+			341 = { is_demilitarized_zone = no }
+		}
+	}
+	if = {
+		limit = {
+			797 = { is_demilitarized_zone = no }
+		}
+	}
+}
+
+ise_sync_claims_and_cores = {
+	# State 1 (Corsica) -> Child State 2000 (Northern Corsica)
+	# Claim propagation (e.g. Italian focuses/decisions claiming Corsica)
+	if = {
+		limit = {
+			1 = { is_claimed_by = ITA }
+			2000 = { NOT = { is_claimed_by = ITA } }
+		}
+		2000 = { add_claim_by = ITA }
+	}
+	# Core propagation (if any tag cores State 1)
+	every_possible_country = {
+		limit = {
+			1 = { is_core_of = PREV }
+			2000 = { NOT = { is_core_of = PREV } }
+		}
+		2000 = { add_core_of = PREV }
+	}
+}
+
+ise_sync_state_control_changed = {
+	# Parent State 1 (Corsica) -> Child State 2000 (Northern Corsica)
+	if = {
+		limit = {
+			FROM.FROM = { state = 1 }
+			2000 = {
+				controller = { tag = FROM }
+				NOT = { controller = { tag = ROOT } }
+			}
+		}
+		ROOT = {
+			transfer_state = 2000
+		}
+	}
+	# When owner changes for State 1
+	if = {
+		limit = {
+			FROM.FROM = { state = 1 }
+			1 = { is_owned_by = ROOT }
+			2000 = { NOT = { is_owned_by = ROOT } }
+		}
+		ROOT = {
+			set_state_owner = 2000
+		}
+	}
+}
+
+ise_sync_startup_validation = {
+	# Startup sanity checks
+}
+

@@ -10,7 +10,7 @@ Shared rules for every mod in this tree (file encodings, build commands, engine 
 ## Mod invariants
 - The invariants in `SPEC.md` are the acceptance test for every split; no work is done until `build.ps1 -ValidateOnly`, `build.ps1 -Test` and `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded` pass.
 - New state ids start at 2000 and a state file replaces the upstream file whole [RT56-005] [LOAD-010]; a naval base needs a coastal province [EQP-005].
-- Both compatches (`mods/immersive-states-expanded-rt56-compatch`, and the Reichskommissariat Plus one once created) are updated in the same work as every split.
+- Both compatches (`mods/immersive-states-expanded-rt56-compatch` and `mods/immersive-states-expanded-rkplus-compatch`) are updated in the same work as every split.
 
 ## Workflow (subagents in `.claude/agents/`)
 - Order per region: `researcher` writes `research/<region>.md` (carve proposal with province ids) -> the user approves it -> `implementer` carves, one at a time, never in parallel -> `reviewer` checks the result -> the user does the in-game check.
