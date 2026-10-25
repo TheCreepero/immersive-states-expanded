@@ -32,5 +32,19 @@ The path to the approved proposal in `research/`. You are not given the Implemen
 10. Map: run `Get-HoiProvinceMap.ps1 -Mode Check -State <id>` for every state the diff touches (parent and new) and `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded -CheckContiguity`. A WARN the proposal does not explain is a finding. Render a picture (`Export-HoiProvinceMapImage.ps1 -Mode Carve`) only for such a WARN or when the main session asks, one per flagged carve; ids come from the text tools, not from the picture. The rules are in the `hoi4-state-modding` skill, section "Seeing the map".
 11. Sync: every new state id (every id above the base game's highest) has an entry in both `ise_sync_claims_and_cores` and `ise_sync_state_control_changed` of `common/scripted_effects/ise_state_sync_effects.txt`, and the control rule only sets the controller (`set_state_controller`), never `transfer_state`, so occupying a parent does not annex its child. `build.ps1 -Test` runs `tests/StateSync.Tests.ps1`, which checks all of this; quote its result. For each split parent run `Get-HoiStateReferences.ps1 -StateId <parent> -Mod <Road to 56>,<Reichskommissariats Plus> -Summary` (counts only, 5-25 s each; open the detail only for a file the summary names). A `Transfer` or `CoreClaim` reference the sync entries do not cover, or a `(DMZ)` scope on a parent whose child is not synchronised, is a finding.
 
+<!-- hoi-agent-block:reviewer-contract:begin -->
+A finding that rests on engine behaviour the register does not hold is marked *unverified* and names the game check that would settle it.
+
+## Re-review
+
+When the caller sends fixes for a later round, keep the finding ids. Check each earlier finding against the repository, not against the caller's account of the fix. Then review what the round changed for new problems. New findings continue the numbering.
+
 ## Output
-A table with one row per check: PASS, FAIL or NOT CHECKED (with why), the evidence (command output or file and line), then the list of findings ordered by severity. Do not fix anything.
+
+- Findings by severity, each with an id (C1, I1, M1), file:line, what is wrong, the evidence (command output or quoted line) and, when you see one, a possible fix.
+  - Critical: the change ships wrong behaviour in what the task is about, or breaks the game.
+  - Important: wrong behaviour elsewhere, a broken rule, or a check that cannot fail.
+  - Minor: everything else.
+- One line per check: PASS, FAIL or NOT CHECKED (why).
+- A verdict: ready, or not ready and why.
+<!-- hoi-agent-block:reviewer-contract:end -->
