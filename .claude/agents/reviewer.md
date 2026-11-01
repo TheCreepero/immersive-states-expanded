@@ -17,10 +17,10 @@ The path to the approved proposal in `research/`. You are not given the Implemen
 - Reference reads allowed: SPEC.md, AGENTS.md, the approved proposal, `tests/`, and parent states through `Get-HoiState.ps1` (vanilla, and with `-Mod` for Road to 56) instead of browsing game folders.
 - Whole-mod checks come from running the audit scripts, not from reading every state file.
 - Out of scope: the web, `scratch/` (except pictures the map tools write to `scratch/maps`), anything outside these repos, the proposal's historical reasoning.
-- Bash is for the audit scripts, `build.ps1 -ValidateOnly` and `-Test`, `Get-HoiState.ps1`, `Get-HoiProvinceMap.ps1`, `Get-HoiStateReferences.ps1` and read-only git (`status`, `diff`, `log`). Nothing that writes, except the map tools' cache and the pictures they put in `scratch/maps`.
+- Bash is for the audit scripts, `build.ps1 -ValidateOnly` and `-Test`, `tests\Run-Tests.ps1 -Changed`, `Get-HoiState.ps1`, `Get-HoiProvinceMap.ps1`, `Get-HoiStateReferences.ps1` and read-only git (`status`, `diff`, `log`). Nothing that writes, except the map tools' cache and the pictures they put in `scratch/maps`.
 
 ## Checks
-1. Run `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded -CheckLoadOrder`, `build.ps1 -ValidateOnly` and `build.ps1 -Test`. Quote the result.
+1. Run `Test-HoiStateIntegrity.ps1 -Mod immersive-states-expanded -CheckLoadOrder`, `build.ps1 -ValidateOnly` and `tests\Run-Tests.ps1 -Changed`. Quote the result. Trust a pasted full `build.ps1 -Test` summary line; when none was pasted, run `-Test` once.
 2. SPEC invariant 1: every province of each split parent is in exactly one state.
 3. Invariant 2: new ids are unique and continue the base's highest id without a gap (`-CheckLoadOrder` checks it).
 4. Invariant 3: for each split, recompute parent plus children against the vanilla parent from `Get-HoiState.ps1`: manpower, building levels, resources; infrastructure follows the proposal (the parent's level, one more for a single-city state). Owner, controller and cores of the children match the parent unless the proposal says otherwise.
